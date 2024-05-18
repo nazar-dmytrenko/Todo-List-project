@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
+
 from todolist.views import (
     TaskListView,
     TaskCreateView,
@@ -34,47 +37,18 @@ from todolist.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TaskListView.as_view(), name="index"),
-    path(
-        "create/",
-        TaskCreateView.as_view(),
-        name="task-create"),
-    path(
-        "<int:pk>/",
-        TaskDetailView.as_view(),
-        name="task-detail"),
-    path(
-        "<int:pk>/update/",
-        TaskUpdateView.as_view(),
-        name="task-update"),
-    path(
-        "<int:pk>/delete/",
-        TaskDeleteView.as_view(),
-        name="task-delete"),
-    path(
-        "<int:pk>/complete/",
-        TaskCompleteView.as_view(),
-        name="task-complete"),
-    path(
-        "<int:pk>/undo/",
-        TaskUndoView.as_view(),
-        name="task-undo"),
+    path("create/", TaskCreateView.as_view(), name="task-create"),
+    path("<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
+    path("<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
+    path("<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path("<int:pk>/complete/", TaskCompleteView.as_view(), name="task-complete"),
+    path("<int:pk>/undo/", TaskUndoView.as_view(), name="task-undo"),
 
-    path(
-        "tags/",
-        TagListView.as_view(),
-        name="tag-list"),
-    path(
-        "tags/create/",
-        TagCreateView.as_view(),
-        name="tag-create"),
-    path(
-        "tags/<int:pk>/update/",
-        TagUpdateView.as_view(),
-        name="tag-update"),
-    path(
-        "tags/<int:pk>/delete/",
-        TagDeleteView.as_view(),
-        name="tag-delete"),
-]
+    path("tags/", TagListView.as_view(), name="tag-list"),
+    path("tags/create/", TagCreateView.as_view(), name="tag-create"),
+    path("tags/<int:pk>/update/", TagUpdateView.as_view(), name="tag-update"),
+    path("tags/<int:pk>/delete/", TagDeleteView.as_view(), name="tag-delete"),
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 app_name = "todolist"
