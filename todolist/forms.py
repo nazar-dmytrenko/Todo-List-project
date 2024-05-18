@@ -13,10 +13,10 @@ class TaskSearchForm(forms.Form):
 
 
 class TaskForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+    datetime = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
     )
+
     deadline = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
         required=False
@@ -25,15 +25,6 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = "__all__"
-
-    def clean_deadline(self):
-        deadline = self.cleaned_data.get("deadline", "")
-        if deadline:
-            now = timezone.localtime(timezone.now())
-            if deadline <= now + timezone.timedelta(hours=1):
-                raise forms.ValidationError(
-                    f"The deadline should be in an hour from current time"
-                    f"({now.strftime('%d.%m.%Y %H:%M')}) or more.")
 
 
 class TagForm(forms.ModelForm):
