@@ -54,18 +54,20 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
-    # template_name = "task_pages/task_form.html"
+    template_name = "todolist/task_form.html"
+    success_url = reverse_lazy("index")
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
-    # template_name = "task_pages/task_confirm_delete.html"
+    template_name = "todolist/task_confirm_delete.html"
+    success_url = reverse_lazy("index")
 
 
 class TaskCompleteView(LoginRequiredMixin, generic.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         task = get_object_or_404(Task, pk=self.kwargs["pk"])
-        task.is_done = True
+        task.is_completed = True
         task.save()
         return reverse_lazy("index")
 
@@ -73,7 +75,7 @@ class TaskCompleteView(LoginRequiredMixin, generic.RedirectView):
 class TaskUndoView(generic.RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         task = get_object_or_404(Task, pk=self.kwargs["pk"])
-        task.is_done = False
+        task.is_completed = False
         task.save()
         return reverse_lazy("index")
 
@@ -111,10 +113,11 @@ class TagCreateView(LoginRequiredMixin, generic.CreateView):
 class TagUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Tag
     form_class = TagForm
-    # template_name = "task_pages/tag_form.html"
+    template_name = "todolist/tag_form.html"
+    success_url = reverse_lazy("tag-list")
 
 
 class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Tag
-    # template_name = "task_pages/tag_confirm_delete.html"
+    template_name = "todolist/tag_confirm_delete.html"
     success_url = reverse_lazy("tag-list")
