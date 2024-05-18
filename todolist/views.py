@@ -16,7 +16,7 @@ from todolist.models import Task, Tag
 class TaskListView(generic.ListView):
     model = Task
     paginate_by = 5
-    ordering = ["is_complete"]
+    ordering = ["is_completed"]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
@@ -28,8 +28,8 @@ class TaskListView(generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Task.objects.prefetch_related("tags").order_by(
-            "is_complete", "-datetime"
+        queryset = Task.objects.prefetch_related("tag").order_by(
+            "is_completed", "-datetime"
         )
         form = TaskSearchForm(self.request.GET)
 
@@ -48,18 +48,18 @@ class TaskDetailView(generic.DetailView):
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
-    success_url = reverse_lazy("todolist:index")
+    success_url = reverse_lazy("index")
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
-    # template_name = "todolist/task_form.html"
+    # template_name = "task_pages/task_form.html"
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
-    # template_name = "todolist/task_confirm_delete.html"
+    # template_name = "task_pages/task_confirm_delete.html"
 
 
 class TaskCompleteView(LoginRequiredMixin, generic.RedirectView):
@@ -67,7 +67,7 @@ class TaskCompleteView(LoginRequiredMixin, generic.RedirectView):
         task = get_object_or_404(Task, pk=self.kwargs["pk"])
         task.is_done = True
         task.save()
-        return reverse_lazy("todolist:index")
+        return reverse_lazy("index")
 
 
 class TaskUndoView(generic.RedirectView):
@@ -75,7 +75,7 @@ class TaskUndoView(generic.RedirectView):
         task = get_object_or_404(Task, pk=self.kwargs["pk"])
         task.is_done = False
         task.save()
-        return reverse_lazy("todolist:index")
+        return reverse_lazy("index")
 
 
 class TagListView(generic.ListView):
@@ -105,16 +105,16 @@ class TagListView(generic.ListView):
 class TagCreateView(LoginRequiredMixin, generic.CreateView):
     model = Tag
     form_class = TagForm
-    success_url = reverse_lazy("todolist:tag-list")
+    success_url = reverse_lazy("tag-list")
 
 
 class TagUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Tag
     form_class = TagForm
-    # template_name = "todolist/tag_form.html"
+    # template_name = "task_pages/tag_form.html"
 
 
 class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Tag
-    # template_name = "todolist/tag_confirm_delete.html"
-    success_url = reverse_lazy("todolist:tag-list")
+    # template_name = "task_pages/tag_confirm_delete.html"
+    success_url = reverse_lazy("tag-list")
