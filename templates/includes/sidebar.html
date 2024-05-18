@@ -1,18 +1,17 @@
-{% load query_transform %}
-{% if is_paginated %}
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">prev</a>
-      </li>
+<ul class="sidebar-nav list-group">
+  {% if user.is_authenticated %}
+    <h4>User: <strong>{{ user.username }}</strong></h4>
+    {% if user.is_superuser %}
+      <p><a href="http://127.0.0.1:8000/admin/" target="_blank" style="text-decoration: none; color: black">Admin panel</a></p>
     {% endif %}
-    <li class="page-item active">
-      <span class="page-link">{{ page_obj.number }} of {{ paginator.num_pages }}</span>
-    </li>
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a href="?{% query_transform request page=page_obj.next_page_number %}" class="page-link">next</a>
-      </li>
-    {% endif %}
-  </ul>
-{% endif %}
+  {% endif %}
+
+  <br>
+  <li class="list-group-item"><a href="{% url 'index' %}">Home</a></li>
+  <li class="list-group-item"><a href="{% url 'tag-list' %}">Tags</a></li>
+  <br>
+  {% if user.is_authenticated %}
+    <li class="list-group-item"><a href="{% url 'task-create' %}">Add task</a></li>
+    <li class="list-group-item"><a href="{% url 'tag-create' %}">Add tag</a></li>
+  {% endif %}
+</ul>
