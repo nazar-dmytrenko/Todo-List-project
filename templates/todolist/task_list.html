@@ -15,7 +15,7 @@
 
     {% for task in task_list %}
       <a href="{% url 'task-detail' pk=task.id %}"><strong>{{ task.content }}</strong></a>
-      {% if task.is_done %}
+      {% if task.is_completed %}
         <strong class="done">Done</strong>
         <form action="{% url 'task-undo' pk=task.pk %}" method="post" style="display: inline;">
           {% csrf_token %}
@@ -36,7 +36,7 @@
       </p>
 
 
-      <p>Created at: {{ task.datatime }}</p>
+      <p>Created at: {{ task.datetime }}</p>
       {% if task.deadline %}
         <p>Deadline: {{ task.deadline }}</p>
       {% endif %}
