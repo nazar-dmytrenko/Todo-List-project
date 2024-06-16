@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+
+{% block content %}
+  <h1>Task List
+    <a style="float: right" class="btn btn-primary" href="{% url 'task-create' %}">Add task</a>
+  </h1>
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔍">
+  </form>
+  <hr>
+  {% if task_list %}
+
+    {% for task in task_list %}
+      <a href="{% url 'task-detail' pk=task.id %}"><strong>{{ task.content }}</strong></a>
+      {% if task.is_completed %}
+        <strong class="done">Done</strong>
+        <form action="{% url 'task-undo' pk=task.pk %}" method="post" style="display: inline;">
+          {% csrf_token %}
+          <button style="float: right" class="btn btn-sm btn-warning" type="submit">Undo</button>
+        </form>
+      {% else %}
+        <strong class="not-done">Not Done</strong>
+        <form action="{% url 'task-complete' pk=task.pk %}" method="post" style="display: inline;">
+          {% csrf_token %}
+          <button style="float: right" class="btn btn-sm btn-success" type="submit">Complete</button>
+        </form>
+      {% endif %}
+
+
+      <p>
+        <a class="btn btn-primary" href="{% url 'task-update' pk=task.id %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'task-delete' pk=task.id %}">Delete</a>
+      </p>
+
+
+      <p>Created at: {{ task.datetime }}</p>
+      {% if task.deadline %}
+        <p>Deadline: {{ task.deadline }}</p>
+      {% endif %}
+      {% for tag in task.tags.all %}
+        <strong>Tags: </strong>{{ tag }}
+      {% endfor %}
+      <hr>
+    {% endfor %}
+  {% else %}
+    <h2>There's no tasks yet!</h2>
+  {% endif %}
+{% endblock %}

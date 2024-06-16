@@ -1,0 +1,17 @@
+<ul class="sidebar-nav list-group">
+  {% if user.is_authenticated %}
+    <h4>User: <strong>{{ user.username }}</strong></h4>
+    {% if user.is_superuser %}
+      <p><a href="http://127.0.0.1:8000/admin/" target="_blank" style="text-decoration: none; color: black">Admin panel</a></p>
+    {% endif %}
+  {% endif %}
+
+  <br>
+  <li class="list-group-item"><a href="{% url 'index' %}">Home</a></li>
+  <li class="list-group-item"><a href="{% url 'tag-list' %}">Tags</a></li>
+  <br>
+  {% if user.is_authenticated %}
+    <li class="list-group-item"><a href="{% url 'task-create' %}">Add task</a></li>
+    <li class="list-group-item"><a href="{% url 'tag-create' %}">Add tag</a></li>
+  {% endif %}
+</ul>
