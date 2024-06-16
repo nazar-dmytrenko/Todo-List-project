@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ("datetime", models.DateTimeField()),
                 ("deadline", models.DateTimeField()),
                 ("is_completed", models.BooleanField(default=False)),
-                ("tag", models.ManyToManyField(to="todolist.tag")),
+                ("tag", models.ManyToManyField(to="task_pages.tag")),
             ],
             options={
                 "ordering": ("datetime",),

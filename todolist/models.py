@@ -26,4 +26,4 @@ class Task(models.Model):
         return self.content
 
     def get_absolute_url(self):
-        return reverse("todo_list_app:task-detail", args=[str(self.id)])
+        return reverse("todolist:task-detail", args=[str(self.id)])
